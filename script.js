@@ -95,26 +95,6 @@ document.getElementById('y').textContent = new Date().getFullYear();
   }
 })();
 
-(function () {
-  const reduceQuery = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (reduceQuery && reduceQuery.matches) return;
-  if (!window.VanillaTilt) return;
-
-  const targets = document.querySelectorAll('[data-tilt]');
-  if (!targets.length) return;
-
-  VanillaTilt.init(targets, {
-    max: 2.5,
-    speed: 700,
-    scale: 1.002,
-    glare: true,
-    'max-glare': 0.08,
-    perspective: 1800,
-    gyroscope: true,
-    reset: true
-  });
-})();
-
 // Starfield canvas (Grok-ish)
 (function () {
   const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -241,4 +221,27 @@ document.getElementById('y').textContent = new Date().getFullYear();
   });
 
   start();
+})();
+
+(function () {
+  const nodes = document.querySelectorAll('[data-reveal]');
+  if (!nodes.length) return;
+
+  const reveal = (target) => target.classList.add('is-revealed');
+
+  if (!('IntersectionObserver' in window)) {
+    nodes.forEach(reveal);
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        reveal(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -20% 0px' });
+
+  nodes.forEach((node) => observer.observe(node));
 })();

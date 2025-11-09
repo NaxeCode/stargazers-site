@@ -28,28 +28,28 @@
     </span>
   </header>
 
-  <main class="hero" role="main" data-tilt>
+  <main class="hero" role="main">
     <h1 class="pulsar"><span id="hero-line" class="hero-line">Pull up a nebula and stay awhile.</span></h1>
     <p class="lead">Stargazers is a low-key cosmic corner for builders, gamers, and night-sky watchers. If you like tinkering, lore drops, or lo-fi at 2 AM, you're home.</p>
   </main>
 
   <section class="grid" aria-label="What you'll find">
-    <article class="card" data-tilt>
+    <article class="card">
       <h3>Chill cosmic vibe</h3>
       <p>Lo-fi, starscapes, and late-night builds. Cozy without the cringe.</p>
     </article>
-    <article class="card" data-tilt>
+    <article class="card">
       <h3>Makers & gamers</h3>
       <p>Dev logs, art drops, Valorant scrims, and show-and-tell.</p>
     </article>
-    <article class="card" data-tilt>
+    <article class="card">
       <h3>Zero-drama rules</h3>
       <p>Be kind. No spam. Respect the cosmos and each other.</p>
     </article>
   </section>
 
   <section class="join-panel" aria-labelledby="join-title">
-    <div class="join-shell" data-tilt>
+    <div class="join-shell">
       <div class="join-copy">
         <p class="eyebrow">Join the server</p>
         <h2 id="join-title">Drop into Stargazers</h2>
@@ -66,15 +66,15 @@
       <div class="join-faq" aria-labelledby="join-faq-title">
         <h3 id="join-faq-title">Quick answers</h3>
         <div class="faq-list">
-          <article class="faq-card" data-tilt>
+          <article class="faq-card">
             <h4>How do I join?</h4>
             <p>Hit <em>Launch Discord</em>. Accept the invite and you will drop straight into #arrival.</p>
           </article>
-          <article class="faq-card" data-tilt>
+          <article class="faq-card">
             <h4>Is there an age requirement?</h4>
             <p>13+ to follow Discord's TOS. Most members are 18-30, so expect PG-13 with mature chill.</p>
           </article>
-          <article class="faq-card" data-tilt>
+          <article class="faq-card">
             <h4>Do I need a mic?</h4>
             <p>Not at all. Text-first vibes with optional voice for events, watch parties, or raids.</p>
           </article>
@@ -83,18 +83,98 @@
     </div>
   </section>
 
+  <div class="rift-divider" aria-hidden="true">
+    <div class="divider-dome"></div>
+  </div>
+  <section class="rift" aria-labelledby="rift-title" data-reveal>
+    <div class="rift-horizon" aria-hidden="true">
+      <div class="horizon-glow"></div>
+      <div class="horizon-ring"></div>
+      <div class="horizon-stars"></div>
+    </div>
+    <div class="rift-content">
+      <p class="eyebrow">Deep field</p>
+      <h2 id="rift-title">Drift into the outer lane</h2>
+      <p class="rift-lead">The farther you scroll, the quieter it gets. This layer is for slow builds, midnight playlists, and the members who stick around past sunrise.</p>
+      <div class="rift-grid">
+        <article class="rift-card">
+          <h3>Signal Room</h3>
+          <p>Drop WIP screenshots, voice memos, and long-form thoughts without the rush.</p>
+        </article>
+        <article class="rift-card">
+          <h3>Observatory</h3>
+          <p>Shared watchlists, lore dives, and community reads—curated each month.</p>
+        </article>
+        <article class="rift-card">
+          <h3>Quiet Ops</h3>
+          <p>Opt-in pings for collabs, playtests, or co-working sprints when you need a crew.</p>
+        </article>
+      </div>
+    </div>
+    <div class="observatory" aria-hidden="true">
+      <svg viewBox="0 0 800 240" preserveAspectRatio="xMidYMax meet">
+        <defs>
+          <linearGradient id="obsGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="rgba(18,24,40,.9)"/>
+            <stop offset="100%" stop-color="rgba(5,6,12,1)"/>
+          </linearGradient>
+        </defs>
+        <path d="M0 200 Q120 170 200 190 T400 185 T600 190 Q700 200 800 180 L800 240 L0 240Z" fill="url(#obsGradient)" opacity=".9"/>
+        <path d="M150 190 Q300 140 400 150 T650 190" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="3"/>
+        <g fill="none" stroke="rgba(255,255,255,.08)" stroke-width="2">
+          <path d="M330 80 a60 60 0 1 1 120 0" />
+          <path d="M365 200 v-85 a35 35 0 0 1 70 0v85" />
+        </g>
+        <g stroke="rgba(255,255,255,.15)" stroke-width="3" stroke-linecap="round">
+          <path d="M380 55 l110 -35" />
+          <circle cx="500" cy="15" r="10" fill="rgba(122,162,247,.5)" stroke="none"/>
+        </g>
+        <rect x="422" y="150" width="26" height="48" fill="rgba(122,162,247,.25)"/>
+        <g class="constellation">
+          <!-- Big Dipper -->
+          <polyline points="20,80 60,55 110,78 150,95 190,72 230,92 270,120" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="20" cy="80" r="3"/>
+          <circle cx="60" cy="55" r="3"/>
+          <circle cx="110" cy="78" r="3"/>
+          <circle cx="150" cy="95" r="3"/>
+          <circle cx="190" cy="72" r="3"/>
+          <circle cx="230" cy="92" r="3"/>
+          <circle cx="270" cy="120" r="3"/>
+          <!-- Little Dipper -->
+          <polyline points="560,35 600,25 640,45 670,68 705,60 740,82 775,64" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="560" cy="35" r="3"/>
+          <circle cx="600" cy="25" r="3"/>
+          <circle cx="640" cy="45" r="3"/>
+          <circle cx="670" cy="68" r="3"/>
+          <circle cx="705" cy="60" r="3"/>
+          <circle cx="740" cy="82" r="3"/>
+          <circle cx="775" cy="64" r="3"/>
+          <!-- Orion -->
+          <polyline points="430,10 455,45 495,30 545,80 495,135 455,110 430,160" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+          <circle cx="430" cy="10" r="3"/>
+          <circle cx="455" cy="45" r="3"/>
+          <circle cx="495" cy="30" r="3"/>
+          <circle cx="545" cy="80" r="3"/>
+          <circle cx="495" cy="135" r="3"/>
+          <circle cx="455" cy="110" r="3"/>
+          <circle cx="430" cy="160" r="3"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+
   <!-- Optional: Official Discord widget. Replace SERVERID.
   <div class="panel">
     <iframe src="https://discord.com/widget?id=YOUR_SERVER_ID&theme=dark" width="100%" height="320" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
   </div> -->
 
-  <div class="sep" role="presentation"></div>
+  <div class="night-floor">
+    <div class="sep" role="presentation"></div>
+    <footer class="footer">
+      <p class="muted">Made with stardust. c <span id="y"></span> Stargazers</p>
+    </footer>
+  </div>
 
-  <footer class="footer">
-    <p class="muted">Made with stardust. c <span id="y"></span> Stargazers</p>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.0/dist/vanilla-tilt.min.js" crossorigin="anonymous"></script>
   <script src="script.js"></script>
 </body>
 </html>
