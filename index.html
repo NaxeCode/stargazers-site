@@ -5,176 +5,598 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Stargazers - Cosmic Discord</title>
   <meta name="description" content="Stargazers is a cozy, cosmic-themed Discord for makers, gamers, and night-sky enjoyers. Pull up a nebula and hang out." />
-
-  <!-- Open Graph / Social -->
-  <meta property="og:title" content="Stargazers - Cosmic Discord" />
-  <meta property="og:description" content="A cozy, cosmic-themed Discord for makers, gamers, and night-sky enjoyers." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://stargazers.yourdomain" />
-  <meta property="og:image" content="https://stargazers.yourdomain/og.jpg" />
-  <meta name="twitter:card" content="summary_large_image" />
-
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23fff' d='M32 4l5.9 16.6L56 23.3 41.5 35.4 45.9 52 32 42.6 18.1 52l4.4-16.6L8 23.3l18.1-2.7z'/%3E%3C/svg%3E"/>
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --fg: #f0f0f5;
+      --muted: #9ca3af;
+      --accent: #8b5cf6;
+      --accent-glow: #a78bfa;
+      --card: #16161e;
+      --card-hover: #1e1e2e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      min-height: 100vh;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated gradient background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.15), transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.1), transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.08), transparent 60%);
+      animation: float 20s ease-in-out infinite;
+      z-index: -2;
+    }
+
+    @keyframes float {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.1); }
+    }
+
+    /* Particle canvas */
+    #particles {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+    }
+
+    /* Header */
+    header {
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--fg);
+      text-decoration: none;
+    }
+
+    .logo svg {
+      width: 28px;
+      height: 28px;
+      filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.6));
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.6)); }
+      50% { transform: scale(1.05); filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.8)); }
+    }
+
+    /* Hero Section */
+    .hero {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+    }
+
+    /* --- SIMPLE ROTATOR + descender-safe spacing --- */
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 800;
+      line-height: 1.15;  /* slightly looser to avoid clipping */
+      min-height: 1.3em;  /* reserves space for full line incl. descenders */
+      margin-bottom: 2rem;
+      overflow: visible;  /* let descenders render outside line box if needed */
+    }
+
+    @keyframes gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .rotator {
+      display: inline-block;
+      white-space: nowrap;
+
+      /* gradient shimmer text */
+      background: linear-gradient(135deg, #f0f0f5 0%, #a78bfa 50%, #ec4899 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      background-size: 200% 200%;
+      animation: gradient-shift 8s ease infinite;
+
+      /* fade transition */
+      transition: opacity 220ms ease;
+      will-change: opacity;
+
+      /* descender breathing room */
+      padding-bottom: 0.2em; /* gives y/g/j/q room so they don't clip */
+    }
+
+    .rotator.is-hidden { opacity: 0; }
+
+    .hero p {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: var(--muted);
+      max-width: 700px;
+      margin: 0 auto 3rem;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 1rem 2.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+      color: white;
+      box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.5);
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .btn-primary:hover::before { opacity: 1; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 40px -10px rgba(139, 92, 246, 0.6); }
+
+    .btn span { position: relative; z-index: 1; }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--fg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(139, 92, 246, 0.5);
+      transform: translateY(-2px);
+    }
+
+    /* Features Grid */
+    .features {
+      max-width: 1400px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 2.5rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(139, 92, 246, 0.15), transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .feature-card:hover::before { opacity: 1; }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(139, 92, 246, 0.3);
+      background: var(--card-hover);
+      box-shadow: 0 20px 60px -20px rgba(139, 92, 246, 0.4);
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature-icon svg {
+      width: 30px;
+      height: 30px;
+      color: var(--accent-glow);
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature-card p {
+      color: var(--muted);
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Deep Section */
+    .deep-section {
+      max-width: 1400px;
+      margin: 8rem auto 4rem;
+      padding: 0 2rem;
+      position: relative;
+    }
+
+    .deep-content {
+      background: linear-gradient(135deg, rgba(22, 22, 30, 0.8), rgba(30, 30, 46, 0.8));
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 32px;
+      padding: 4rem;
+      backdrop-filter: blur(20px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .deep-content::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.15), transparent 70%);
+      border-radius: 50%;
+      animation: float-slow 15s ease-in-out infinite;
+    }
+
+    @keyframes float-slow {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-30px, 30px); }
+    }
+
+    .deep-content h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .deep-content .lead {
+      font-size: 1.25rem;
+      color: var(--muted);
+      max-width: 700px;
+      margin-bottom: 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .deep-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .deep-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.3s;
+    }
+
+    .deep-card:hover {
+      border-color: rgba(139, 92, 246, 0.4);
+      transform: translateY(-3px);
+    }
+
+    .deep-card h4 {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      color: var(--accent-glow);
+    }
+
+    /* Stats Section */
+    .stats {
+      max-width: 1400px;
+      margin: 6rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      text-align: center;
+    }
+
+    .stat-item {
+      position: relative;
+    }
+
+    .stat-number {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-glow), #ec4899);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+      line-height: 1;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 8rem;
+      padding: 3rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero { padding: 4rem 1.5rem 2rem; }
+      .features { gap: 1.5rem; padding: 0 1.5rem; }
+      .feature-card { padding: 2rem; }
+      .deep-content { padding: 2.5rem 1.5rem; }
+      .stats { gap: 2rem; }
+      .stat-number { font-size: 2.5rem; }
+      .hero h1 { line-height: 1.18; min-height: 1.35em; }
+      .rotator { padding-bottom: 0.22em; }
+    }
+
+    /* Smooth scroll */
+    html { scroll-behavior: smooth; }
+  </style>
 </head>
 <body>
-  <!-- Grok-ish starfield background -->
-  <canvas id="starfield" class="space" aria-hidden="true"></canvas>
+  <canvas id="particles"></canvas>
 
   <header>
-    <span class="badge">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.09 6.26L20 9.27l-5 3.64L16.18 20 12 16.9 7.82 20 9 12.91l-5-3.64 5.91-.99L12 2z"/></svg>
+    <a href="#" class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2l2.09 6.26L20 9.27l-5 3.64L16.18 20 12 16.9 7.82 20 9 12.91l-5-3.64 5.91-.99L12 2z"/>
+      </svg>
       Stargazers
-    </span>
+    </a>
   </header>
 
-  <main class="hero" role="main">
-    <h1 class="pulsar"><span id="hero-line" class="hero-line">Pull up a nebula and stay awhile.</span></h1>
-    <p class="lead">Stargazers is a low-key cosmic corner for builders, gamers, and night-sky watchers. If you like tinkering, lore drops, or lo-fi at 2 AM, you're home.</p>
-  </main>
+  <section class="hero">
+    <h1>
+      <span id="rotatingText" class="rotator" aria-live="polite">Pull up a nebula</span>
+    </h1>
 
-  <section class="grid" aria-label="What you'll find">
-    <article class="card">
-      <h3>Chill cosmic vibe</h3>
-      <p>Lo-fi, starscapes, and late-night builds.</p>
-    </article>
-    <article class="card">
-      <h3>Makers & gamers</h3>
-      <p>Dev logs, art drops, Valorant scrims, and show-and-tell.</p>
-    </article>
-    <article class="card">
-      <h3>Zero-drama rules</h3>
-      <p>Be kind. No spam. Respect the cosmos and each other.</p>
-    </article>
+    <p>A cosmic corner for builders, gamers, and night-sky watchers. If you like tinkering, lore drops, or lo-fi at 2 AM, you're home.</p>
+    <div class="cta-group">
+      <a href="https://discord.gg/yourInvite" class="btn btn-primary" target="_blank" rel="noopener">
+        <span>Join Discord</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14m-7-7l7 7-7 7"/>
+        </svg>
+      </a>
+      <a href="#features" class="btn btn-secondary">
+        <span>Learn More</span>
+      </a>
+    </div>
   </section>
 
-  <section class="join-panel" aria-labelledby="join-title">
-    <div class="join-shell">
-      <div class="join-copy">
-        <p class="eyebrow">Join the server</p>
-        <h2 id="join-title">Drop into Stargazers</h2>
-        <p>Instant invite. Zero spam. Just a tight-knit orbit of builders, gamers, and late-night listeners.</p>
-        <a class="cta" href="https://discord.gg/yourInvite" rel="noopener" target="_blank" aria-label="Launch Stargazers on Discord">
-          <svg width="22" height="22" viewBox="0 0 245 240" aria-hidden="true">
-            <path fill="#eaf2ff" d="M104.4 104.9c-5.7 0-10.2 5-10.2 11.1 0 6.1 4.6 11.1 10.2 11.1 5.7 0 10.2-5 10.2-11.1.1-6.1-4.5-11.1-10.2-11.1zm36.2 0c-5.7 0-10.2 5-10.2 11.1 0 6.1 4.6 11.1 10.2 11.1 5.7 0 10.2-5 10.2-11.1 0-6.1-4.5-11.1-10.2-11.1z"/>
-            <path fill="#eaf2ff" d="M189.5 20h-134C24.1 20 0 44.1 0 73.5v93C0 195.9 24.1 220 54 220h113.2l-5.3-18.6 12.8 11.9 12.1 11.2L245 220V73.5C245 44.1 220.9 20 189.5 20zm-38.6 135s-3.6-4.3-6.6-8.1c13.1-3.7 18.1-11.9 18.1-11.9-4.1 2.7-8 4.6-11.5 5.9-5 2.1-9.8 3.5-14.5 4.3-9.6 1.8-18.4 1.3-25.9-.1-5.7-1.1-10.7-2.7-14.9-4.3-2.3-.9-4.8-2-7.3-3.4-.3-.2-.6-.3-.9-.5-.2-.1-.3-.2-.4-.3-1.8-1-2.8-1.6-2.8-1.6s4.8 8 17.5 11.8c-3 3.8-6.7 8.3-6.7 8.3-22.1-.7-30.5-15.2-30.5-15.2 0-32.2 14.4-58.4 14.4-58.4 14.4-10.7 28.1-10.4 28.1-10.4l1 1.2c-18 5.2-26.3 13.2-26.3 13.2s2.2-1.2 5.9-2.9c10.7-4.7 19.2-6 22.7-6.4.6-.1 1.1-.2 1.7-.2 6.1-.8 13-1 20.2-.2 9.5 1.1 19.7 3.9 30.1 9.6 0 0-7.9-7.5-25-12.7l1.4-1.6s13.7-.3 28.1 10.4c0 0 14.4 26.2 14.4 58.4 0 0-8.5 14.5-30.6 15.2z"/>
-          </svg>
-          Launch Discord
-        </a>
-        <p class="micro">Opens the official invite in-app or in-browser.</p>
+  <section class="features" id="features">
+    <div class="feature-card" data-card>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
       </div>
-      <div class="join-faq" aria-labelledby="join-faq-title">
-        <h3 id="join-faq-title">Quick answers</h3>
-        <div class="faq-list">
-          <article class="faq-card">
-            <h4>How do I join?</h4>
-            <p>Hit <em>Launch Discord</em>. Accept the invite and you will drop straight into #arrival.</p>
-          </article>
-          <article class="faq-card">
-            <h4>Is there an age requirement?</h4>
-            <p>13+ to follow Discord's TOS. Most members are 18-30, so expect PG-13 with mature chill.</p>
-          </article>
-          <article class="faq-card">
-            <h4>Do I need a mic?</h4>
-            <p>Not at all. Text-first vibes with optional voice for events, watch parties, or raids.</p>
-          </article>
+      <h3>Chill Vibes</h3>
+      <p>Lo-fi beats, starscapes, and late-night builds. A drama-free zone where creativity thrives in the quiet hours.</p>
+    </div>
+
+    <div class="feature-card" data-card>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <h3>Makers & Gamers</h3>
+      <p>Share dev logs, art drops, game sessions, and show-and-tell. A community that celebrates building and playing together.</p>
+    </div>
+
+    <div class="feature-card" data-card>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3m.08 4h.01"/>
+        </svg>
+      </div>
+      <h3>Zero Drama</h3>
+      <p>Be kind. No spam. Respect the cosmos and each other. Simple rules for a peaceful community.</p>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat-item">
+      <div class="stat-number">500+</div>
+      <div class="stat-label">Members</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">24/7</div>
+      <div class="stat-label">Active</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">∞</div>
+      <div class="stat-label">Possibilities</div>
+    </div>
+  </section>
+
+  <section class="deep-section">
+    <div class="deep-content">
+      <h2>Drift into the outer lane</h2>
+      <p class="lead">The farther you scroll, the quieter it gets. This layer is for slow builds, midnight playlists, and members who stick around past sunrise.</p>
+      <div class="deep-grid">
+        <div class="deep-card">
+          <h4>Signal Room</h4>
+          <p>Drop WIP screenshots, voice memos, and long-form thoughts without the rush.</p>
+        </div>
+        <div class="deep-card">
+          <h4>Observatory</h4>
+          <p>Shared watchlists, lore dives, and community reads—curated each month.</p>
+        </div>
+        <div class="deep-card">
+          <h4>Quiet Ops</h4>
+          <p>Opt-in pings for collabs, playtests, or co-working sprints when you need a crew.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="rift-divider" aria-hidden="true">
-    <div class="divider-dome"></div>
-  </div>
-  <section class="rift" aria-labelledby="rift-title" data-reveal>
-    <div class="rift-horizon" aria-hidden="true">
-      <div class="horizon-glow"></div>
-      <div class="horizon-ring"></div>
-      <div class="horizon-stars"></div>
-    </div>
-    <div class="rift-content">
-      <p class="eyebrow">Deep field</p>
-      <h2 id="rift-title">Drift into the outer lane</h2>
-      <p class="rift-lead">The farther you scroll, the quieter it gets. This layer is for slow builds, midnight playlists, and the members who stick around past sunrise.</p>
-      <div class="rift-grid">
-        <article class="rift-card">
-          <h3>Signal Room</h3>
-          <p>Drop WIP screenshots, voice memos, and long-form thoughts without the rush.</p>
-        </article>
-        <article class="rift-card">
-          <h3>Observatory</h3>
-          <p>Shared watchlists, lore dives, and community reads—curated each month.</p>
-        </article>
-        <article class="rift-card">
-          <h3>Quiet Ops</h3>
-          <p>Opt-in pings for collabs, playtests, or co-working sprints when you need a crew.</p>
-        </article>
-      </div>
-    </div>
-    <div class="observatory" aria-hidden="true">
-      <svg viewBox="0 0 800 240" preserveAspectRatio="xMidYMax meet">
-        <defs>
-          <linearGradient id="obsGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="rgba(18,24,40,.9)"/>
-            <stop offset="100%" stop-color="rgba(5,6,12,1)"/>
-          </linearGradient>
-        </defs>
-        <path d="M0 200 Q120 170 200 190 T400 185 T600 190 Q700 200 800 180 L800 240 L0 240Z" fill="url(#obsGradient)" opacity=".9"/>
-        <path d="M150 190 Q300 140 400 150 T650 190" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="3"/>
-        <g fill="none" stroke="rgba(255,255,255,.08)" stroke-width="2">
-          <path d="M330 80 a60 60 0 1 1 120 0" />
-          <path d="M365 200 v-85 a35 35 0 0 1 70 0v85" />
-        </g>
-        <g stroke="rgba(255,255,255,.15)" stroke-width="3" stroke-linecap="round">
-          <path d="M380 55 l110 -35" />
-          <circle cx="500" cy="15" r="10" fill="rgba(122,162,247,.5)" stroke="none"/>
-        </g>
-        <rect x="422" y="150" width="26" height="48" fill="rgba(122,162,247,.25)"/>
-        <g class="constellation">
-          <!-- Big Dipper -->
-          <polyline points="20,80 60,55 110,78 150,95 190,72 230,92 270,120" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="20" cy="80" r="3"/>
-          <circle cx="60" cy="55" r="3"/>
-          <circle cx="110" cy="78" r="3"/>
-          <circle cx="150" cy="95" r="3"/>
-          <circle cx="190" cy="72" r="3"/>
-          <circle cx="230" cy="92" r="3"/>
-          <circle cx="270" cy="120" r="3"/>
-          <!-- Little Dipper -->
-          <polyline points="560,35 600,25 640,45 670,68 705,60 740,82 775,64" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="560" cy="35" r="3"/>
-          <circle cx="600" cy="25" r="3"/>
-          <circle cx="640" cy="45" r="3"/>
-          <circle cx="670" cy="68" r="3"/>
-          <circle cx="705" cy="60" r="3"/>
-          <circle cx="740" cy="82" r="3"/>
-          <circle cx="775" cy="64" r="3"/>
-          <!-- Orion -->
-          <polyline points="430,10 455,45 495,30 545,80 495,135 455,110 430,160" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
-          <circle cx="430" cy="10" r="3"/>
-          <circle cx="455" cy="45" r="3"/>
-          <circle cx="495" cy="30" r="3"/>
-          <circle cx="545" cy="80" r="3"/>
-          <circle cx="495" cy="135" r="3"/>
-          <circle cx="455" cy="110" r="3"/>
-          <circle cx="430" cy="160" r="3"/>
-        </g>
-      </svg>
-    </div>
-  </section>
+  <footer>
+    <p>Made with stardust. © <span id="year"></span> Stargazers</p>
+  </footer>
 
-  <!-- Optional: Official Discord widget. Replace SERVERID.
-  <div class="panel">
-    <iframe src="https://discord.com/widget?id=YOUR_SERVER_ID&theme=dark" width="100%" height="320" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-  </div> -->
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-  <div class="night-floor">
-    <div class="sep" role="presentation"></div>
-    <footer class="footer">
-      <p class="muted">Made with stardust. c <span id="y"></span> Stargazers</p>
-    </footer>
-  </div>
+    /* ---------------------------
+       SIMPLE HERO TEXT ROTATOR
+    ---------------------------- */
+    const phrases = [
+      "Pull up a nebula",
+      "Vibes only",
+      "Late-night builds",
+      "Orbit with us",
+      "Lo-fi energy",
+      "Stay awhile"
+    ];
 
-  <script src="script.js"></script>
+    const el = document.getElementById('rotatingText');
+    let i = 0;
+    const HOLD_MS = 4000;
+    const FADE_MS = 220;
+
+    function cycle() {
+      el.classList.add('is-hidden'); // fade out
+      setTimeout(() => {
+        i = (i + 1) % phrases.length;
+        el.textContent = phrases[i];
+        el.classList.remove('is-hidden'); // fade in
+      }, FADE_MS);
+    }
+
+    setInterval(cycle, HOLD_MS);
+
+    /* ---------------------------
+       PARTICLES
+    ---------------------------- */
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    const particles = [];
+    let w, h;
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.size = Math.random() * 2;
+        this.opacity = Math.random() * 0.5 + 0.2;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) this.reset();
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(167, 139, 250, ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+
+    for (let k = 0; k < 100; k++) particles.push(new Particle());
+
+    function animate() {
+      ctx.clearRect(0, 0, w, h);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    /* ---------------------------
+       CARD HOVER LIGHT EFFECT
+    ---------------------------- */
+    document.querySelectorAll('[data-card]').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mouse-x', `${x}%`);
+        card.style.setProperty('--mouse-y', `${y}%`);
+      });
+    });
+  </script>
 </body>
 </html>
